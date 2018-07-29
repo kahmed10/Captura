@@ -5,9 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Captura;
 using Captura.Audio;
+using KeyAddon;
 
 namespace Screna
 {
+    
+
     /// <summary>
     /// Default implementation of <see cref="IRecorder"/> interface.
     /// Can output to <see cref="IVideoFileWriter"/> or <see cref="IAudioFileWriter"/>.
@@ -22,6 +25,7 @@ namespace Screna
 
         readonly int _frameRate, _maxFrameCount, _congestionFrameCount;
         bool _congestion;
+        KeyVector _keyVector;
 
         readonly BlockingCollection<IBitmapFrame> _frames;
         readonly Stopwatch _sw;
@@ -40,14 +44,15 @@ namespace Screna
         /// <param name="ImageProvider">The image source.</param>
         /// <param name="FrameRate">Video Frame Rate.</param>
         /// <param name="AudioProvider">The audio source. null = no audio.</param>
-        public Recorder(IVideoFileWriter VideoWriter, IImageProvider ImageProvider, int FrameRate, IAudioProvider AudioProvider = null)
+        public Recorder(IVideoFileWriter VideoWriter, IImageProvider ImageProvider, int FrameRate, IAudioProvider AudioProvider = null, KeyVector keyVector = null)
         {
             _videoWriter = VideoWriter ?? throw new ArgumentNullException(nameof(VideoWriter));
             _imageProvider = ImageProvider ?? throw new ArgumentNullException(nameof(ImageProvider));
             _audioProvider = AudioProvider;
+            _keyVector = keyVector;
 
             if (FrameRate <= 0)
-                throw new ArgumentException("Frame Rate must be possitive", nameof(FrameRate));
+                throw new ArgumentException("Frame Rate must be positive", nameof(FrameRate));
 
             _frameRate = FrameRate;
             _congestionFrameCount = _frameRate * 2; // 2 seconds
@@ -81,6 +86,7 @@ namespace Screna
 
         void DoWrite()
         {
+            
             try
             {
                 while (!_frames.IsCompleted)
@@ -136,9 +142,7 @@ namespace Screna
                     try
                     {
                         _frames.Add(Frame);
-
                         ++frameCount;
-
                         return true;
                     }
                     catch (InvalidOperationException)

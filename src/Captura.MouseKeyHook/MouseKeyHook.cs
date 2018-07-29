@@ -3,12 +3,16 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Screna;
+using KeyAddon;
 
 namespace Captura.Models
 {
     /// <summary>
     /// Draws Mouse Clicks and/or Keystrokes on an Image.
     /// </summary>
+
+    
+   
     public class MouseKeyHook : IOverlay
     {
         #region Fields
@@ -18,7 +22,9 @@ namespace Captura.Models
 
         bool _mouseClicked;
         MouseButtons _mouseButtons;
-        
+
+        public KeyVector _keyVector;
+
         readonly KeyRecords _records;
 
         readonly KeymapViewModel _keymap;
@@ -27,11 +33,12 @@ namespace Captura.Models
         /// <summary>
         /// Creates a new instance of <see cref="MouseKeyHook"/>.
         /// </summary>
-        public MouseKeyHook(MouseClickSettings MouseClickSettings, KeystrokesSettings KeystrokesSettings, KeymapViewModel Keymap)
+        public MouseKeyHook(MouseClickSettings MouseClickSettings, KeystrokesSettings KeystrokesSettings, KeymapViewModel Keymap, KeyVector keyVector)
         {
             _mouseClickSettings = MouseClickSettings;
             _keystrokesSettings = KeystrokesSettings;
             _keymap = Keymap;
+            _keyVector = keyVector;
 
             _hook = Hook.GlobalEvents();
             
@@ -52,6 +59,22 @@ namespace Captura.Models
 
         void OnKeyUp(object Sender, KeyEventArgs Args)
         {
+            if (Args.KeyCode == Keys.W)
+            {
+                _keyVector.wPressed = false;
+            }
+            if (Args.KeyCode == Keys.A)
+            {
+                _keyVector.aPressed = false;
+            }
+            if (Args.KeyCode == Keys.S)
+            {
+                _keyVector.sPressed = false;
+            }
+            if (Args.KeyCode == Keys.D)
+            {
+                _keyVector.dPressed = false;
+            }
             if (!_keystrokesSettings.Display)
             {
                 _records.Clear();
@@ -86,6 +109,22 @@ namespace Captura.Models
 
         void OnKeyDown(object Sender, KeyEventArgs Args)
         {
+            if (Args.KeyCode == Keys.W)
+            {
+                _keyVector.wPressed = true;
+            }
+            if (Args.KeyCode == Keys.A)
+            {
+                _keyVector.aPressed = true;
+            }
+            if (Args.KeyCode == Keys.S)
+            {
+                _keyVector.sPressed = true;
+            }
+            if (Args.KeyCode == Keys.D)
+            {
+                _keyVector.dPressed = true;
+            }
             if (!_keystrokesSettings.Display)
             {
                 _records.Clear();

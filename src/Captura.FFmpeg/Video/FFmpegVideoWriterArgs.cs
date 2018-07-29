@@ -13,7 +13,8 @@
                 VideoArgsProvider = VideoArgsProvider,
                 AudioQuality = Args.AudioQuality,
                 AudioArgsProvider = AudioArgsProvider,
-                AudioProvider = Args.AudioProvider
+                AudioProvider = Args.AudioProvider,
+                keyVector = Args.keyVector
             };
         }
 

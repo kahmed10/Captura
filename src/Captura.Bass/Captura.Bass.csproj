@@ -51,6 +51,10 @@
       <Project>{388d8b28-e629-4684-8537-8d78719b69e5}</Project>
       <Name>Captura.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KeyAddon\KeyAddon.csproj">
+      <Project>{383ac71f-4473-448e-804f-78eee082ddfd}</Project>
+      <Name>KeyAddon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

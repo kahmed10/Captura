@@ -87,5 +87,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KeyAddon\KeyAddon.csproj">
+      <Project>{383ac71f-4473-448e-804f-78eee082ddfd}</Project>
+      <Name>KeyAddon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

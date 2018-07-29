@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KeyAddon;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable InconsistentNaming
@@ -98,11 +99,11 @@ namespace Captura.Models
             return new FFmpegWriter(FFmpegVideoWriterArgs.FromVideoWriterArgs(Args, _videoArgsProvider, _audioArgsProvider));
         }
 
-        public IVideoFileWriter GetVideoFileWriter(VideoWriterArgs Args, string OutputArgs)
+        public IVideoFileWriter GetVideoFileWriter(VideoWriterArgs Args, string OutputArgs, KeyVector keyVector = null)
         {
             var args = FFmpegVideoWriterArgs.FromVideoWriterArgs(Args, _videoArgsProvider, _audioArgsProvider);
             args.OutputArgs = OutputArgs;
-
+            args.keyVector = keyVector;
             return new FFmpegWriter(args);
         }
     }

@@ -13,6 +13,7 @@ using Captura.Webcam;
 using Microsoft.Win32;
 using Screna;
 using Timer = System.Timers.Timer;
+using KeyAddon;
 
 namespace Captura.ViewModels
 {
@@ -25,6 +26,7 @@ namespace Captura.ViewModels
         IRecorder _recorder;
         string _currentFileName;
         bool _isVideo;
+        KeyVector _keyVector;
 
         readonly SynchronizationContext _syncContext = SynchronizationContext.Current;
 
@@ -80,6 +82,7 @@ namespace Captura.ViewModels
             _recentViewModel = RecentViewModel;
             _webCamProvider = WebCamProvider;
             _keymap = Keymap;
+            _keyVector = new KeyVector();
 
             RecordCommand = new DelegateCommand(OnRecordExecute);
 
@@ -218,6 +221,7 @@ namespace Captura.ViewModels
 
         public bool StartRecording(string FileName = null)
         {
+
             if (_videoViewModel.SelectedVideoWriterKind is FFmpegWriterProvider ||
                 _videoViewModel.SelectedVideoWriterKind is StreamingWriterProvider ||
                 (_videoViewModel.SelectedVideoSourceKind is NoVideoSourceProvider && _videoViewModel.SelectedVideoSource is FFmpegAudioItem))
@@ -287,6 +291,8 @@ namespace Captura.ViewModels
                 extension = x.Extension;
 
             _currentFileName = FileName ?? Path.Combine(Settings.OutPath, $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}{extension}");
+            _keyVector.FileName = FileName ?? Path.Combine(Settings.OutPath, $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}{".txt"}"); 
+
 
             IAudioProvider audioProvider = null;
 
@@ -310,7 +316,7 @@ namespace Captura.ViewModels
 
             try
             {
-                videoEncoder = GetVideoFileWriterWithPreview(imgProvider, audioProvider);
+                videoEncoder = GetVideoFileWriterWithPreview(imgProvider, audioProvider, _keyVector);
             }
             catch (Exception e)
             {
@@ -335,7 +341,7 @@ namespace Captura.ViewModels
                 default:
                     if (_isVideo)
                     {
-                        _recorder = new Recorder(videoEncoder, imgProvider, Settings.Video.FrameRate, audioProvider);
+                        _recorder = new Recorder(videoEncoder, imgProvider, Settings.Video.FrameRate, audioProvider, _keyVector);
                     }
                     else if (_videoViewModel.SelectedVideoSource is NoVideoItem audioWriter)
                     {
@@ -501,17 +507,17 @@ namespace Captura.ViewModels
                 _regionProvider.Release();
         }
 
-        IVideoFileWriter GetVideoFileWriterWithPreview(IImageProvider ImgProvider, IAudioProvider AudioProvider)
+        IVideoFileWriter GetVideoFileWriterWithPreview(IImageProvider ImgProvider, IAudioProvider AudioProvider, KeyVector keyVector)
         {
             if (_videoViewModel.SelectedVideoSourceKind is NoVideoSourceProvider)
                 return null;
 
             _previewWindow.Init(ImgProvider.Width, ImgProvider.Height);
 
-            return new WithPreviewWriter(GetVideoFileWriter(ImgProvider, AudioProvider), _previewWindow);
+            return new WithPreviewWriter(GetVideoFileWriter(ImgProvider, AudioProvider, null, keyVector), _previewWindow);
         }
 
-        IVideoFileWriter GetVideoFileWriter(IImageProvider ImgProvider, IAudioProvider AudioProvider, string FileName = null)
+        IVideoFileWriter GetVideoFileWriter(IImageProvider ImgProvider, IAudioProvider AudioProvider, string FileName = null, KeyVector keyVector = null)
         {
             if (_videoViewModel.SelectedVideoSourceKind is NoVideoSourceProvider)
                 return null;
@@ -523,7 +529,8 @@ namespace Captura.ViewModels
                 VideoQuality = Settings.Video.Quality,
                 ImageProvider = ImgProvider,
                 AudioQuality = Settings.Audio.Quality,
-                AudioProvider = AudioProvider
+                AudioProvider = AudioProvider,
+                keyVector = keyVector
             });
         }
 
@@ -547,7 +554,7 @@ namespace Captura.ViewModels
             }
 
             overlays.Add(new MousePointerOverlay(Settings.MousePointerOverlay));
-            overlays.Add(new MouseKeyHook(Settings.Clicks, Settings.Keystrokes, _keymap));
+            overlays.Add(new Captura.Models.MouseKeyHook(Settings.Clicks, Settings.Keystrokes, _keymap, _keyVector));
             overlays.Add(new ElapsedOverlay(Settings.Elapsed, () => TimeSpan));
 
             // Custom Overlays

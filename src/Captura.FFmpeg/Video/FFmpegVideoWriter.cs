@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.Threading.Tasks;
+using KeyAddon;
 
 namespace Captura.Models
 {
@@ -15,6 +17,8 @@ namespace Captura.Models
         readonly Process _ffmpegProcess;
         readonly NamedPipeServerStream _ffmpegIn;
         readonly byte[] _videoBuffer;
+        UInt64 frameCount;
+        public KeyVector _keyVector;
 
         const string PipePrefix = @"\\.\pipe\";
 
@@ -28,6 +32,9 @@ namespace Captura.Models
             var settings = ServiceProvider.Get<FFmpegSettings>();
 
             _videoBuffer = new byte[Args.ImageProvider.Width * Args.ImageProvider.Height * 4];
+            frameCount = 0;
+            _keyVector = Args.keyVector;
+            _keyVector.CreateKeyOutputFile();
 
             Console.WriteLine($"Video Buffer Allocated: {_videoBuffer.Length}");
 
@@ -153,11 +160,14 @@ namespace Captura.Models
                 ++_framesSkipped;
                 return;
             }
-
+            _keyVector.WriteKeyOutputFile();
+            ++frameCount;
             using (Frame)
             {
                 Frame.CopyTo(_videoBuffer, _videoBuffer.Length);
             }
+
+            //Debug.Print(frameCount.ToString());
 
             _lastFrameTask = _ffmpegIn.WriteAsync(_videoBuffer, 0, _videoBuffer.Length);
         }

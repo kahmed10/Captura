@@ -58,6 +58,10 @@
       <Project>{388d8b28-e629-4684-8537-8d78719b69e5}</Project>
       <Name>Captura.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KeyAddon\KeyAddon.csproj">
+      <Project>{383ac71f-4473-448e-804f-78eee082ddfd}</Project>
+      <Name>KeyAddon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Screna\Screna.csproj">
       <Project>{23cb9adb-ba9f-4618-bd0c-589a00a532e5}</Project>
       <Name>Screna</Name>

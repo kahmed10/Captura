@@ -99,6 +99,10 @@
       <Project>{222C215B-663F-4BD6-9B3E-8FA99C867B22}</Project>
       <Name>DesktopDuplication</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KeyAddon\KeyAddon.csproj">
+      <Project>{383ac71f-4473-448e-804f-78eee082ddfd}</Project>
+      <Name>KeyAddon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Screna\Screna.csproj">
       <Project>{23cb9adb-ba9f-4618-bd0c-589a00a532e5}</Project>
       <Name>Screna</Name>

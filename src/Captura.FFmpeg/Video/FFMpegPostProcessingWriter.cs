@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using KeyAddon;
 
 namespace Captura.Models
 {
@@ -21,7 +22,8 @@ namespace Captura.Models
                 FileName = _tempFileName,
                 FrameRate = Args.FrameRate,
                 ImageProvider = Args.ImageProvider,
-                VideoQuality = Args.VideoQuality
+                VideoQuality = Args.VideoQuality,
+                keyVector = Args.keyVector
             }, "-f mp4 -y");
         }
 

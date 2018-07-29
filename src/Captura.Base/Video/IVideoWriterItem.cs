@@ -1,4 +1,6 @@
-﻿namespace Captura.Models
+﻿using KeyAddon;
+
+namespace Captura.Models
 {
     /// <summary>
     /// Items to show in Video Writers list.

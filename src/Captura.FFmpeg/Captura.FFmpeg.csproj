@@ -27,6 +27,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
@@ -38,6 +39,10 @@
     <ProjectReference Include="..\Captura.Loc\Captura.Loc.csproj">
       <Project>{1E4BE8D4-A84F-4389-ACD9-277F1CB5F097}</Project>
       <Name>Captura.Loc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KeyAddon\KeyAddon.csproj">
+      <Project>{383ac71f-4473-448e-804f-78eee082ddfd}</Project>
+      <Name>KeyAddon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

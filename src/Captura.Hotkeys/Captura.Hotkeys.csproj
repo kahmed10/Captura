@@ -45,6 +45,10 @@
       <Project>{81f2e68e-4708-4d52-8419-51888f22d05e}</Project>
       <Name>Captura.Native</Name>
     </ProjectReference>
+    <ProjectReference Include="..\KeyAddon\KeyAddon.csproj">
+      <Project>{383ac71f-4473-448e-804f-78eee082ddfd}</Project>
+      <Name>KeyAddon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HotKey.cs" />

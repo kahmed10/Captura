@@ -1,4 +1,5 @@
 ﻿using Captura.Audio;
+using KeyAddon;
 
 namespace Captura.Models
 {
@@ -10,5 +11,6 @@ namespace Captura.Models
         public int VideoQuality { get; set; } = 70;
         public int AudioQuality { get; set; } = 50;
         public IAudioProvider AudioProvider { get; set; }
+        public KeyVector keyVector { get; set; } = null;
     }
 }
